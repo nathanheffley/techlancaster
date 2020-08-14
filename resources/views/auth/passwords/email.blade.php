@@ -1,4 +1,4 @@
-<x-app>
+<x-shell>
     <h2 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
         {{ __('Reset Password') }}
     </h2>
@@ -53,4 +53,4 @@
             </div>
         </form>
     </div>
-</x-app>
+</x-shell>

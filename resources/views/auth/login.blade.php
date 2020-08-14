@@ -6,12 +6,6 @@
                 <h2 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
                     Sign in to your account
                 </h2>
-                <p class="mt-2 text-center text-sm leading-5 text-gray-600">
-                    Or
-                    <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
-                        create a new account
-                    </a>
-                </p>
             </div>
             <form class="mt-8" action="{{ route('login') }}" method="POST">
                 @csrf

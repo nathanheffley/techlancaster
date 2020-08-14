@@ -17,8 +17,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes(['verify' => true]);
+Auth::routes(['register' => false]);
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/admin', 'AdminController@index')->name('admin');
+
+    Route::resource('meetups', 'MeetupController')->except([
+        'index',
+        'show',
+    ]);
 });
