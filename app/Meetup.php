@@ -14,6 +14,11 @@ class Meetup extends Model
 
     protected ?array $info = null;
 
+    public function getApiDataCacheKeyAttribute(): string
+    {
+        return 'meetup-' . $this->id . '-api-data';
+    }
+
     public function getNameAttribute(): string
     {
         if (is_null($this->info)) {
@@ -25,7 +30,25 @@ class Meetup extends Model
 
     protected function fetchInfo(): void
     {
-        $data = Cache::remember('meetup-'.$this->id.'-api-data', 86400, fn () => Http::get($this->api_url)->json());
+        $data = Cache::remember($this->apiDataCacheKey, 86400, function() {
+            $response = Http::get($this->api_url);
+
+            if ($response->failed()) {
+                return [
+                    'name' => 'Error fetching data.',
+                ];
+            }
+
+            $json = $response->json();
+
+            if (! isset($json['name'])) {
+                return [
+                    'name' => 'Error parsing data.',
+                ];
+            }
+
+            return $json;
+        });
 
         $this->info = [
             'name' => $data['name'],
