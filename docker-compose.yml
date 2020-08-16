@@ -21,9 +21,13 @@ services:
       - redis
   db:
     image: postgres
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_DATABASE}
   redis:
     image: redis
+    ports:
+      - "6379:6379"

@@ -15,7 +15,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="bg-gray-50">
     {{ $slot }}
 </body>
 </html>

@@ -13,15 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', 'HomeController')->name('home');
 
 Auth::routes(['register' => false]);
 Route::get('logout', 'Auth\LoginController@logout');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/admin', 'AdminController@index')->name('admin');
+Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+    Route::get('/', 'AdminController@index')->name('admin');
 
     Route::resource('meetups', 'MeetupController')->except([
         'index',

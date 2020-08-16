@@ -28,6 +28,33 @@ class Meetup extends Model
         return $this->info['name'];
     }
 
+    public function getDescriptionAttribute(): string
+    {
+        if (is_null($this->info)) {
+            $this->fetchInfo();
+        }
+
+        return $this->info['description'];
+    }
+
+    public function getWebsiteAttribute(): string
+    {
+        if (is_null($this->info)) {
+            $this->fetchInfo();
+        }
+
+        return $this->info['website'];
+    }
+
+    public function getMeetupAttribute(): string
+    {
+        if (is_null($this->info)) {
+            $this->fetchInfo();
+        }
+
+        return $this->info['website'];
+    }
+
     protected function fetchInfo(): void
     {
         $data = Cache::remember($this->apiDataCacheKey, 86400, function() {
@@ -36,22 +63,20 @@ class Meetup extends Model
             if ($response->failed()) {
                 return [
                     'name' => 'Error fetching data.',
+                    'description' => 'Error fetching data.',
+                    'website' => '#',
+                    'meetup' => '#',
                 ];
             }
 
-            $json = $response->json();
-
-            if (! isset($json['name'])) {
-                return [
-                    'name' => 'Error parsing data.',
-                ];
-            }
-
-            return $json;
+            return $response->json();
         });
 
         $this->info = [
-            'name' => $data['name'],
+            'name' => $data['name'] ?? "Couldn't fetch name.",
+            'description' => $data['description'] ?? "Couldn't fetch description.",
+            'website' => $data['urls']['website'] ?? '#',
+            'meetup' => $data['urls']['meetup'] ?? '#',
         ];
     }
 }
