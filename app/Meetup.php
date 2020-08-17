@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
@@ -55,6 +56,26 @@ class Meetup extends Model
         return $this->info['website'];
     }
 
+    public function getNextMeetingAttribute(): ?Meeting
+    {
+        if (is_null($this->info)) {
+            $this->fetchInfo();
+        }
+
+        $nextMeeting = $this->info['next_meeting'];
+
+        if (is_null($nextMeeting)) {
+            return null;
+        }
+
+        return new Meeting(
+            $this,
+            $nextMeeting['name'],
+            strip_tags($nextMeeting['description']),
+            Carbon::parse($nextMeeting['time'] / 1000),
+        );
+    }
+
     protected function fetchInfo(): void
     {
         $data = Cache::remember($this->apiDataCacheKey, 86400, function() {
@@ -77,6 +98,7 @@ class Meetup extends Model
             'description' => $data['description'] ?? "Couldn't fetch description.",
             'website' => $data['urls']['website'] ?? '#',
             'meetup' => $data['urls']['meetup'] ?? '#',
+            'next_meeting' => $data['next_meetup'] ?? null,
         ];
     }
 }
