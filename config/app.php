@@ -15,6 +15,13 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'github' => env('APP_GITHUB', 'https://github.com'),
+
+    'hosted_by' => [
+        'name' => env('APP_HOSTED_BY', 'TechLancaster'),
+        'url' => env('APP_HOSTED_BY_URL', 'https://techlancaster.com'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
