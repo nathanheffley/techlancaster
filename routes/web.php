@@ -26,4 +26,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         'show',
     ]);
     Route::get('meetups/refresh', 'MeetupController@refresh')->name('meetups.refresh');
+
+    Route::get('icals/meetups/{meetup}/next.ics', 'ICalController@next')->name('icals.meetups.next');
 });
