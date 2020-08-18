@@ -1,5 +1,5 @@
 <x-shell>
-    <div class="relative px-4 sm:px-6 lg:px-8 py-8 max-w-5xl mx-auto">
+    <div class="relative px-4 sm:px-6 lg:px-8 pt-8 pb-16 max-w-5xl mx-auto">
         <div class="text-lg max-w-prose mx-auto mb-6">
             <img src="{{ asset('img/logo-lg.png') }}" alt="TechLancaster" class="w-full max-w-md mx-auto">
             <p class="mt-4 text-center text-xl text-gray-500 leading-8">Supporting the tech community in Lancaster.</p>

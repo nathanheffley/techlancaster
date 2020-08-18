@@ -68,11 +68,16 @@ class Meetup extends Model
             return null;
         }
 
+        $time = Carbon::parse($nextMeeting['time'] / 1000);
+        if ($time->isBefore(Carbon::now())) {
+            return null;
+        }
+
         return new Meeting(
             $this,
             $nextMeeting['name'],
             strip_tags($nextMeeting['description']),
-            Carbon::parse($nextMeeting['time'] / 1000),
+            $time,
         );
     }
 
