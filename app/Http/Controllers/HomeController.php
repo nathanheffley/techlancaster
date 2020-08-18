@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Meeting;
 use App\Meetup;
-use Illuminate\Support\Carbon;
 
 class HomeController extends Controller
 {
     public function __invoke()
     {
         $meetups = Meetup::all();
-        $nextMeetings = $meetups->filter()
+        $nextMeetings = $meetups
             ->map->nextMeeting
+            ->filter()
             ->sortBy('time');
 
         return view('home', [

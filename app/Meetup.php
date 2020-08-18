@@ -38,7 +38,7 @@ class Meetup extends Model
         return $this->info['description'];
     }
 
-    public function getWebsiteAttribute(): string
+    public function getWebsiteAttribute(): ?string
     {
         if (is_null($this->info)) {
             $this->fetchInfo();
@@ -47,13 +47,13 @@ class Meetup extends Model
         return $this->info['website'];
     }
 
-    public function getMeetupAttribute(): string
+    public function getMeetupAttribute(): ?string
     {
         if (is_null($this->info)) {
             $this->fetchInfo();
         }
 
-        return $this->info['website'];
+        return $this->info['meetup'];
     }
 
     public function getNextMeetingAttribute(): ?Meeting
@@ -79,14 +79,25 @@ class Meetup extends Model
     protected function fetchInfo(): void
     {
         $data = Cache::remember($this->apiDataCacheKey, 86400, function() {
-            $response = Http::get($this->api_url);
+            try {
+                $response = Http::get($this->api_url);
+            } catch (\Exception $e) {
+                return [
+                    'name' => 'Massive failure fetching data.',
+                    'description' => 'Massive failure fetching data.',
+                    'website' => null,
+                    'meetup' => null,
+                    'next_meeting' => null,
+                ];
+            }
 
             if ($response->failed()) {
                 return [
                     'name' => 'Error fetching data.',
                     'description' => 'Error fetching data.',
-                    'website' => '#',
-                    'meetup' => '#',
+                    'website' => null,
+                    'meetup' => null,
+                    'next_meeting' => null,
                 ];
             }
 
@@ -96,8 +107,8 @@ class Meetup extends Model
         $this->info = [
             'name' => $data['name'] ?? "Couldn't fetch name.",
             'description' => $data['description'] ?? "Couldn't fetch description.",
-            'website' => $data['urls']['website'] ?? '#',
-            'meetup' => $data['urls']['meetup'] ?? '#',
+            'website' => $data['urls']['website'] ?? null,
+            'meetup' => $data['urls']['meetup'] ?? null,
             'next_meeting' => $data['next_meetup'] ?? null,
         ];
     }

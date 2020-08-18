@@ -56,4 +56,11 @@ class MeetupController extends Controller
 
         return redirect()->route('admin');
     }
+
+    public function refresh()
+    {
+        Meetup::all()->each(fn (Meetup $meetup) => Cache::forget($meetup->apiDataCacheKey));
+
+        return redirect()->route('admin');
+    }
 }

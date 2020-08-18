@@ -25,4 +25,5 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         'index',
         'show',
     ]);
+    Route::get('meetups/refresh', 'MeetupController@refresh')->name('meetups.refresh');
 });
